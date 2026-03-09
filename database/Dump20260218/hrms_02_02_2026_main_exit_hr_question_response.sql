@@ -1,0 +1,58 @@
+-- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
+--
+-- Host: 10.30.0.93    Database: hrms_02_02_2026
+-- ------------------------------------------------------
+-- Server version	8.0.45-0ubuntu0.24.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `main_exit_hr_question_response`
+--
+
+DROP TABLE IF EXISTS `main_exit_hr_question_response`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `main_exit_hr_question_response` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `hr_exit_question_id` int DEFAULT NULL,
+  `answer` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `modified_by` int DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `main_exit_hr_question_response`
+--
+
+LOCK TABLES `main_exit_hr_question_response` WRITE;
+/*!40000 ALTER TABLE `main_exit_hr_question_response` DISABLE KEYS */;
+INSERT INTO `main_exit_hr_question_response` VALUES (1,301,1,'1.2 years',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(2,301,2,'Recognition in her work',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(3,301,3,'Management is very friendly',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(4,301,4,'Becoz it was direct employment',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(5,301,5,'Got opportunity in client itself so that proud',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(6,301,6,'Yes convinced',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(7,301,7,'easy for her to connect with all peoples',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(8,301,8,'yes',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(9,301,9,'Good',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(10,301,10,NULL,187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(11,301,11,'Friendly nature',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(12,301,12,'Nothing',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(13,301,13,'yes',187,187,'2025-11-07 12:59:45','2025-11-07 12:59:45',1),(14,128,1,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(15,128,2,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(16,128,3,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(17,128,4,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(18,128,5,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(19,128,6,NULL,187,187,'2026-02-03 12:42:57','2026-02-03 12:42:57',1),(20,128,7,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(21,128,8,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(22,128,9,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(23,128,10,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(24,128,11,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(25,128,12,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1),(26,128,13,NULL,187,187,'2026-02-03 12:42:58','2026-02-03 12:42:58',1);
+/*!40000 ALTER TABLE `main_exit_hr_question_response` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-02-18 14:59:44

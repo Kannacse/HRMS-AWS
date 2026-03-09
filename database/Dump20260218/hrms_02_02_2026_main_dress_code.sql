@@ -1,0 +1,61 @@
+-- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
+--
+-- Host: 10.30.0.93    Database: hrms_02_02_2026
+-- ------------------------------------------------------
+-- Server version	8.0.45-0ubuntu0.24.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `main_dress_code`
+--
+
+DROP TABLE IF EXISTS `main_dress_code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `main_dress_code` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `date` date DEFAULT NULL,
+  `year` int NOT NULL,
+  `month` int NOT NULL,
+  `warning` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comments` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `modified_by` int DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `main_dress_code`
+--
+
+LOCK TABLES `main_dress_code` WRITE;
+/*!40000 ALTER TABLE `main_dress_code` DISABLE KEYS */;
+INSERT INTO `main_dress_code` VALUES (1,242,'2025-07-01',2025,7,'Warning One','Test Mail','2025-07-01 20:09:04','2025-07-01 20:10:58',322,322,0),(2,217,'2025-07-01',2025,7,'Warning One','Dress Code','2025-07-01 20:11:31','2025-07-01 20:11:31',322,322,1),(3,217,'2025-08-05',2025,8,'Warning Two','Dress','2025-08-06 09:00:54','2025-08-06 09:00:54',322,322,1),(4,189,'2025-08-18',2025,8,'Warning One','\nViolation of Dress Code','2025-08-18 12:20:14','2025-08-18 12:20:14',322,322,1),(5,58,'2025-08-18',2025,8,'Warning One','Dress Code ','2025-08-18 12:20:52','2025-08-18 12:20:52',322,322,1),(6,80,'2025-09-23',2025,9,'Warning One','Dress Code','2025-09-24 16:56:41','2025-09-24 16:56:41',322,322,1),(7,253,'2025-09-24',2025,9,'Warning One','Dress Code','2025-09-24 16:57:29','2025-09-24 16:57:29',322,322,1),(8,71,'2025-09-29',2025,9,'Warning One','Dress Code','2025-09-29 17:59:25','2025-09-29 17:59:25',322,322,1),(9,216,'2025-09-29',2025,9,'Warning One','Dress Code','2025-09-29 17:59:49','2025-09-29 17:59:49',322,322,1),(10,316,'2025-09-30',2025,9,'Warning One','Dress Code ','2025-10-06 10:24:34','2025-10-06 10:24:34',322,322,1),(11,258,'2025-10-24',2025,10,'Warning One','Dress code','2025-10-24 10:21:02','2025-10-24 10:21:02',187,187,1),(12,410,'2025-10-24',2025,10,'Warning One','Dress code','2025-10-24 10:21:53','2025-10-24 10:21:53',187,187,1),(13,379,'2025-10-24',2025,10,'Warning One','Dress code','2025-10-24 10:23:03','2025-10-24 10:23:03',187,187,1),(14,120,'2025-10-24',2025,10,'Warning One','Dress code','2025-10-24 10:54:37','2025-10-24 10:54:37',187,187,1),(15,310,'2025-11-04',2025,11,'Warning One','Dress Code','2025-11-04 13:34:20','2025-11-04 13:34:20',187,187,1),(16,118,'2025-11-04',2025,11,'Warning One','Dress code','2025-11-04 13:36:38','2025-11-04 13:36:38',187,187,1),(17,216,'2025-11-04',2025,11,'Warning Two','Dress code','2025-11-04 18:44:54','2025-11-04 18:44:54',187,187,1),(18,124,'2025-11-05',2025,11,'Warning One','Dress code','2025-11-05 10:32:36','2025-11-05 10:32:36',187,187,1),(19,120,'2025-11-04',2025,11,'Warning Two','Dress code','2025-11-05 10:33:28','2025-11-05 10:33:28',187,187,1),(20,120,'2025-11-05',2025,11,'Warning Three','Dress code','2025-11-05 10:33:46','2025-11-05 10:33:46',187,187,1),(21,123,'2025-11-05',2025,11,'Warning One','Dress code','2025-11-05 10:34:09','2025-11-05 10:34:09',187,187,1),(22,255,'2025-11-05',2025,11,'Warning One','Dress code','2025-11-05 10:34:45','2025-11-05 10:34:45',187,187,1),(23,189,'2025-11-05',2025,11,'Warning Two','Dress code','2025-11-05 10:54:32','2025-11-05 11:29:16',187,187,0),(24,360,'2025-11-05',2025,11,'Warning One','Dress code','2025-11-05 12:32:27','2025-11-05 12:32:27',187,187,1),(25,258,'2025-11-06',2025,11,'Warning Two','Dress code','2025-11-06 10:46:46','2025-11-06 10:46:46',187,187,1),(26,115,'2025-11-06',2025,11,'Warning One','Dress code','2025-11-06 11:03:13','2025-11-06 11:03:13',187,187,1),(27,258,'2025-11-07',2025,11,'Warning Three','Dress Code ','2025-11-07 15:12:50','2025-11-07 15:12:50',322,322,1),(28,411,'2025-11-07',2025,11,'Warning One','Dress Code','2025-11-07 15:13:19','2025-11-07 15:13:19',322,322,1),(29,136,'2025-11-11',2025,11,'Warning One','Dress Code','2025-11-11 10:03:46','2025-11-11 10:03:46',187,187,1),(30,316,'2025-11-11',2025,11,'Warning Two','Dress code','2025-11-11 16:22:36','2025-11-11 16:22:36',187,187,1),(31,71,'2025-11-14',2025,11,'Warning Two','Dress code','2025-11-14 10:44:17','2025-11-14 10:44:17',187,187,1),(32,364,'2025-11-17',2025,11,'Warning One','Dress Code ','2025-11-18 09:09:04','2025-11-18 09:09:04',322,322,1),(33,122,'2025-11-17',2025,11,'Warning One','Dress Code','2025-11-18 09:09:36','2025-11-18 09:09:36',322,322,1),(34,95,'2025-11-17',2025,11,'Warning One','Dress Code ','2025-11-18 09:10:01','2025-11-18 09:10:01',322,322,1),(35,316,'2025-11-18',2025,11,'Warning Three','Dress code','2025-11-18 10:46:10','2025-11-18 10:46:10',187,187,1),(36,123,'2025-11-18',2025,11,'Warning Two','Dress code','2025-11-18 10:46:36','2025-11-18 10:46:36',187,187,1),(37,358,'2025-11-18',2025,11,'Warning One','Dress code','2025-11-18 10:47:08','2025-11-18 10:47:08',187,187,1),(38,118,'2025-11-18',2025,11,'Warning Two','Dress Code \n','2025-11-18 11:19:03','2025-11-18 11:19:03',322,322,1),(39,320,'2025-11-17',2025,11,'Warning One','Dress Code ','2025-11-18 11:19:45','2025-11-18 11:19:45',322,322,1),(40,114,'2025-11-19',2025,11,'Warning One','Dress code','2025-11-19 17:03:11','2025-11-19 17:03:11',187,187,1),(41,78,'2025-11-19',2025,11,'Warning One','Dress code','2025-11-19 17:06:11','2025-11-19 17:06:11',187,187,1),(42,130,'2025-11-19',2025,11,'Warning One','Dress code','2025-11-19 17:07:57','2025-11-19 17:07:57',187,187,1),(43,358,'2025-11-20',2025,11,'Warning Two','Dress code','2025-11-20 10:59:03','2025-11-20 10:59:03',187,187,1),(44,296,'2025-11-24',2025,11,'Warning One','Dress code','2025-11-24 10:25:44','2025-11-24 10:25:44',187,187,1),(45,358,'2025-11-24',2025,11,'Warning Three','Dress code','2025-11-24 10:27:54','2025-11-24 10:27:54',187,187,1),(46,250,'2025-11-24',2025,11,'Warning One','Dress code','2025-11-24 10:28:47','2025-11-24 10:28:47',187,187,1),(47,121,'2025-11-24',2025,11,'Warning One','Dress code','2025-11-24 10:29:14','2025-11-24 10:29:14',187,187,1),(48,358,'2025-11-25',2025,11,'Warning Four','Dress code','2025-11-25 10:30:27','2025-11-25 10:30:27',187,187,1),(49,121,'2025-11-27',2025,11,'Warning Two','Dress code','2025-11-27 13:02:35','2025-11-27 13:02:35',187,187,1),(50,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:18:49','2025-11-27 15:18:49',187,187,1),(51,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:20:56','2025-11-27 16:27:21',187,187,0),(52,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:20:56','2025-11-27 16:27:15',187,187,0),(53,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:20:56','2025-11-27 16:27:09',187,187,0),(54,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:20:56','2025-11-27 16:27:04',187,187,0),(55,216,'2025-11-27',2025,11,'Warning Three','Dress code','2025-11-27 15:20:56','2025-11-27 16:26:52',187,187,0),(56,120,'2025-11-27',2025,11,'Warning Four','Dress code','2025-11-27 16:27:52','2025-11-27 16:27:52',187,187,1),(57,389,'2025-12-23',2025,12,'Warning One','Dress code','2025-12-23 16:07:46','2025-12-23 16:07:46',187,187,1),(58,316,'2025-12-24',2025,12,'Warning Four','Dress code','2025-12-24 14:13:48','2025-12-24 14:13:48',187,187,1),(59,389,'2025-12-24',2025,12,'Warning Two','Dress code','2025-12-24 14:14:14','2025-12-24 14:14:14',187,187,1);
+/*!40000 ALTER TABLE `main_dress_code` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-02-18 14:58:21
