@@ -2,7 +2,7 @@
 
 Production-level Human Resource Management System (HRMS) deployed on Amazon Web Services (AWS). This is a comprehensive, scalable solution for managing HR operations with infrastructure-as-code (IaC) approach.
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Overview](#overview)
 - [Project Structure](#project-structure)
@@ -18,16 +18,16 @@ Production-level Human Resource Management System (HRMS) deployed on Amazon Web 
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🎯 Overview
+##  Overview
 
 HRMS-AWS is a full-stack Human Resource Management System designed for enterprise-level deployment on AWS. It provides comprehensive HR functionalities including employee management, attendance tracking, leave management, expense management, and more.
 
 ### Key Highlights
-- ✅ **Scalable Infrastructure** - Auto-scaling groups and load balancing
-- ✅ **Secure** - Multi-layer security with WAF, Security Groups, and IAM roles
-- ✅ **Cloud-Native** - Built with Terraform and containerized components
-- ✅ **High Availability** - RDS Multi-AZ, Auto-scaling, Health checks
-- ✅ **Monitoring** - CloudWatch integration and alerting
+-  **Scalable Infrastructure** - Auto-scaling groups and load balancing
+-  **Secure** - Multi-layer security with WAF, Security Groups, and IAM roles
+-  **Cloud-Native** - Built with Terraform and containerized components
+-  **High Availability** - RDS Multi-AZ, Auto-scaling, Health checks
+-  **Monitoring** - CloudWatch integration and alerting
 
 ## 📁 Project Structure
 
@@ -68,7 +68,7 @@ HRMS-AWS/
 └── README.md                        # This file
 ```
 
-## 🛠 Technology Stack
+##  Technology Stack
 
 ### Backend
 - **Runtime**: Node.js
@@ -89,11 +89,10 @@ HRMS-AWS/
 - **Load Balancing**: Application Load Balancer (ALB)
 - **Database**: AWS RDS (Multi-AZ)
 - **Storage**: Amazon S3
-- **DNS**: Route53
 - **Security**: WAF, Security Groups, IAM roles
 - **Monitoring**: CloudWatch
 
-## 📦 Prerequisites
+##  Prerequisites
 
 ### Required
 - AWS Account with appropriate permissions
@@ -118,7 +117,7 @@ export AWS_SECRET_ACCESS_KEY="your_secret_key"
 export AWS_DEFAULT_REGION="ap-south-1"
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Local Development
 
@@ -184,7 +183,7 @@ cd Backend/hrms_feb_node
 npm run migrate
 ```
 
-## 📤 Deployment
+##  Deployment
 
 ### Automated Deployment via Terraform
 All infrastructure provisioning is automated through Terraform:
@@ -211,16 +210,14 @@ cd Infra
 terraform destroy
 ```
 
-⚠️ **WARNING**: This operation is irreversible and will delete all resources including databases.
+ **WARNING**: This operation is irreversible and will delete all resources including databases.
 
-## 🏗 Architecture
+##  Architecture
 
 ### High-Level Architecture
 
 ```
 Internet
-   ↓
-Route53 (DNS)
    ↓
 WAF (Security)
    ↓
@@ -245,7 +242,7 @@ S3 (File Storage)
 3. **IAM Roles** - Application-level permissions
 4. **Encryption** - At transit (TLS) and at rest (RDS encryption)
 
-## ✨ Features
+## Features
 
 ### HR Management
 - Employee Directory
@@ -276,7 +273,7 @@ S3 (File Storage)
 - Notifications
 - Gamification (Fun Points & Games)
 
-## 🔧 Management
+##  Management
 
 Use the provided management script for common operations:
 
@@ -284,7 +281,7 @@ Use the provided management script for common operations:
 ./manage.sh
 ```
 
-## 📝 Configuration
+##  Configuration
 
 ### Terraform Variables
 Edit `terraform.tfvars` to customize:
@@ -297,7 +294,7 @@ Edit `terraform.tfvars` to customize:
 ### Application Configuration
 Configure environment-specific settings in backend and frontend config files.
 
-## 📊 Monitoring & Logs
+##  Monitoring & Logs
 
 ###CloudWatch Dashboards
 Access your monitoring dashboard in AWS Console:
@@ -310,7 +307,7 @@ Logs are aggregated in CloudWatch Logs:
 aws logs tail /aws/ecs/hrms-service --follow
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Clone the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -318,7 +315,7 @@ aws logs tail /aws/ecs/hrms-service --follow
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📋 Best Practices
+##  Best Practices
 
 - **Always plan before applying**: Run `terraform plan` to review changes
 - **Use state locks**: Enable remote backend with state lock support
@@ -327,7 +324,7 @@ aws logs tail /aws/ecs/hrms-service --follow
 - **Monitor costs**: Monitor AWS billing to avoid unexpected charges
 - **Update regularly**: Keep dependencies and AMIs updated
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Terraform Issues
 ```bash
@@ -353,7 +350,7 @@ aws ec2 describe-security-groups --group-ids <sg-id>
 ### Application Issues
 Check logs in CloudWatch and application logs directory.
 
-## 📞 Support
+##  Support
 
 For issues or questions:
 1. Check the troubleshooting section
