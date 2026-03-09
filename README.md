@@ -29,7 +29,7 @@ HRMS-AWS is a full-stack Human Resource Management System designed for enterpris
 -  **High Availability** - RDS Multi-AZ, Auto-scaling, Health checks
 -  **Monitoring** - CloudWatch integration and alerting
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 HRMS-AWS/
