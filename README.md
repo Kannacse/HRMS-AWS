@@ -45,7 +45,6 @@ HRMS-AWS/
 │   │   ├── iam/                     # Identity & Access Management
 │   │   ├── monitoring/              # CloudWatch Monitoring
 │   │   ├── rds/                     # Relational Database Service
-│   │   ├── route53/                 # DNS Management
 │   │   ├── s3/                      # Simple Storage Service
 │   │   ├── security/                # Security Groups & ACLs
 │   │   ├── vpc/                     # Virtual Private Cloud
