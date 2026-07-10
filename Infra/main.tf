@@ -9,7 +9,7 @@ module "security" {
 }
 
 module "iam" {
-  source    = "./modules/IAM"
+  source    = "./modules/iam"
   role_name = "${local.name}-ec2-role"
 }
 
@@ -22,14 +22,14 @@ module "alb" {
 }
 
 module "asg" {
-  source            = "./modules/asg"
-  name              = "${local.name}-asg"
-  instance_type     = var.instance_type
-  public_subnets    = module.vpc.public_subnets
-  ec2_sg            = module.security.ec2_sg
-  target_group_arn  = module.alb.target_group_arn
+  source           = "./modules/asg"
+  name             = "${local.name}-asg"
+  instance_type    = var.instance_type
+  public_subnets   = module.vpc.public_subnets
+  ec2_sg           = module.security.ec2_sg
+  target_group_arn = module.alb.target_group_arn
+  key_name         = var.key_name
 }
-
 
 module "rds" {
   source          = "./modules/rds"
@@ -41,18 +41,17 @@ module "rds" {
 }
 
 module "s3" {
-  source      = "./modules/S3"
-  bucket_name = "${local.name}-alb-logs-803232637504"
+  source      = "./modules/s3"
+  bucket_name = "${local.name}-alb-logs-042775549160"
 }
 
 module "waf" {
-  source = "./modules/WAF"
+  source = "./modules/waf"
   name   = "${local.name}-waf"
 }
 
-
 module "monitoring" {
-  source   = "./modules/Monitoring"
+  source   = "./modules/monitoring"
   name     = local.name
   asg_name = module.asg.asg_name
 }
@@ -61,4 +60,3 @@ resource "aws_wafv2_web_acl_association" "alb_assoc" {
   resource_arn = module.alb.alb_arn
   web_acl_arn  = module.waf.web_acl_arn
 }
-
