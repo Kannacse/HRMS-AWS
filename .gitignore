@@ -3,8 +3,16 @@
 .terraform.lock.hcl
 *.tfstate
 *.tfstate.*
+terraform.tfvars
+*.tfplan
 *.tfvars
 !terraform.tfvars.example
+
+# Logs
+*.log
+
+# Python
+__pycache__/
 
 # IDE
 .vscode/
@@ -16,13 +24,16 @@
 .DS_Store
 Thumbs.db
 
+# Keys
+*.pem
+
+# Environment
+.env
+
 # Dependencies
 node_modules/
 dist/
 build/
-
-# Logs
-*.log
 
 # Local
 local/

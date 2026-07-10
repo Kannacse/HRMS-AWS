@@ -17,3 +17,8 @@ variable "ec2_sg" {
 variable "target_group_arn" {
   type = string
 }
+
+variable "key_name" {
+  description = "EC2 Key Pair Name"
+  type        = string
+}

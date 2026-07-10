@@ -1,5 +1,5 @@
 variable "region" {
-  default = "ap-south-1"
+  default = "ap-south-2"
 }
 
 variable "environment" {
@@ -18,3 +18,8 @@ variable "db_password" {
   sensitive = true
 }
 
+variable "key_name" {
+  description = "EC2 Key Pair"
+  type        = string
+  default     = "hrms-key-hyd"
+}
