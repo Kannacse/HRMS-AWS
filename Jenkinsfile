@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        // Name configured under Manage Jenkins -> Tools
-        // Uncomment if you configured SonarScanner there
-        // sonarQube 'SonarScanner'
-    }
 
     environment {
         COMPOSE_PROJECT_NAME = "hrms"
