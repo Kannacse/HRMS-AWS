@@ -7,7 +7,7 @@ variable "environment" {
 }
 
 variable "instance_type" {
-  default = "t3.micro"
+  default = "t3.medium"
 }
 
 variable "db_username" {
