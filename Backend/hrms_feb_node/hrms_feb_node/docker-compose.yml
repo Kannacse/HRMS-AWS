@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: hrms-backend
+    restart: always
+
+    network_mode: "host"
+
+    env_file:
+      - .env
+
+    volumes:
+      - /var/www/hrms_mobile_node/logs:/usr/src/app/logs

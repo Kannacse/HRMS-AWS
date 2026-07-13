@@ -1,0 +1,75 @@
+require('dotenv').config();
+
+const express = require("express");
+const http = require("http");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+
+// Import routes
+const login = require('./router/login');
+const dashboard = require('./router/dashboard');
+const leaves = require('./router/leaves');
+const attendance = require('./router/attendance');
+const employeeLeaves = require('./router/employee_leaves');
+const activityLog = require('./router/activitylog');
+
+const app = express();
+
+// ============================
+// Security Middleware
+// ============================
+app.use(helmet());
+app.use(express.json());
+
+// Needed when behind AWS ALB / reverse proxy
+app.set("trust proxy", true);
+
+// ============================
+// Rate Limiting
+// ============================
+
+const limiter = rateLimit({
+windowMs: 15 * 60 * 1000,
+max: 1000
+});
+
+const loginLimiter = rateLimit({
+windowMs: 15 * 60 * 1000,
+max: 20
+});
+
+app.use("/api/", limiter);
+
+// ============================
+// API Routes
+// ============================
+
+// Login route with stricter limit
+app.use('/api/hrms/', loginLimiter, login);
+
+// Other routes
+app.use('/api/hrms/', dashboard);
+app.use('/api/hrms/', leaves);
+app.use('/api/hrms/', attendance);
+app.use('/api/hrms/', employeeLeaves);
+app.use('/api/hrms/activity', activityLog);
+
+// ============================
+// Health Check (Used by ALB)
+// ============================
+
+app.get("/api/hrms/health", (req, res) => {
+res.status(200).json({ status: "OK" });
+});
+
+// ============================
+// Server Setup
+// ============================
+
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+
+server.listen(PORT, "0.0.0.0", () => {
+console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+});
