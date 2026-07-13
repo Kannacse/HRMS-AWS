@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     environment {
         COMPOSE_PROJECT_NAME = "hrms"
     }
@@ -17,59 +16,58 @@ pipeline {
         stage('Show Workspace') {
             steps {
                 sh '''
-                pwd
-                ls -la
+                    echo "===== Current Directory ====="
+                    pwd
+
+                    echo "===== Repository Structure ====="
+                    ls -R
                 '''
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.projectKey=hrms \
-                      -Dsonar.projectName=HRMS \
-                      -Dsonar.sources=.
-                    '''
-                }
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker compose build'
-            }
-        }
-
-        stage('Deploy') {
+        stage('Verify Tools') {
             steps {
                 sh '''
-                docker compose down || true
-                docker compose up -d
+                    echo "===== Git ====="
+                    git --version
+
+                    echo "===== Node ====="
+                    node -v
+
+                    echo "===== npm ====="
+                    npm -v
+
+                    echo "===== Docker ====="
+                    docker version
                 '''
             }
         }
 
-        stage('Verify') {
+        stage('Verify Docker') {
             steps {
                 sh '''
-                docker ps
-                docker compose ps
+                    echo "===== Running Containers ====="
+                    docker ps
+
+                    echo "===== Docker Images ====="
+                    docker images
                 '''
             }
         }
+
+        stage('Pipeline Ready') {
+            steps {
+                echo 'Jenkins environment is fully configured.'
+                echo 'Ready for SonarQube, Docker Build and HRMS Deployment.'
+            }
+        }
+
     }
 
     post {
+
         success {
-            echo 'HRMS deployed successfully.'
+            echo 'Pipeline completed successfully.'
         }
 
         failure {
