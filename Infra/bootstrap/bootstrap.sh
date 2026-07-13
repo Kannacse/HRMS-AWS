@@ -5,10 +5,10 @@ LOG_FILE="/var/log/bootstrap.log"
 
 exec > >(tee -a ${LOG_FILE}) 2>&1
 
-echo "========================================"
+
 echo "HRMS DevOps Bootstrap Started"
 date
-echo "========================================"
+
 
 # Update system
 sudo yum update -y
@@ -59,7 +59,7 @@ sudo chown -R ec2-user:ec2-user /opt/docker
 sudo chown -R ec2-user:ec2-user /opt/scripts
 sudo chown -R ec2-user:ec2-user /opt/logs
 
-echo "========================================"
+
 echo "Bootstrap Completed Successfully"
 date
-echo "========================================"
+
