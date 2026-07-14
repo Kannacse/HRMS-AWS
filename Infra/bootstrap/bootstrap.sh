@@ -1,65 +1,31 @@
 #!/bin/bash
-set -e
 
-LOG_FILE="/var/log/bootstrap.log"
+set -euo pipefail
 
-exec > >(tee -a ${LOG_FILE}) 2>&1
+LOG_FILE="/var/log/hrms-bootstrap.log"
 
+exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "HRMS DevOps Bootstrap Started"
-date
+echo "==========================================="
+echo "HRMS Bootstrap Started"
+echo "==========================================="
 
+dnf update -y
 
-# Update system
-sudo yum update -y
+dnf install -y git
 
-# Install required packages
-sudo yum install -y \
-    git \
-    wget \
-    curl \
-    unzip \
-    vim \
-    jq \
-    tree
+mkdir -p /opt/hrms
 
-# Install Docker
-sudo amazon-linux-extras install docker -y
+cd /opt/hrms
 
-sudo systemctl enable docker
-sudo systemctl start docker
+git clone https://github.com/Kannacse/HRMS-AWS.git
 
-sudo usermod -aG docker ec2-user
+cd HRMS-AWS
 
-# Install Docker Compose
-sudo mkdir -p /usr/local/lib/docker/cli-plugins
+chmod +x automation/bootstrap.sh
 
-sudo curl -SL \
-https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
--o /usr/local/lib/docker/cli-plugins/docker-compose
+./automation/bootstrap.sh
 
-sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-
-# Install Java 17
-sudo amazon-linux-extras enable corretto17
-
-sudo yum install -y java-17-amazon-corretto
-
-# Install AWS CLI
-sudo yum install -y awscli
-
-# Create project directories
-sudo mkdir -p /opt/hrms
-sudo mkdir -p /opt/docker
-sudo mkdir -p /opt/scripts
-sudo mkdir -p /opt/logs
-
-sudo chown -R ec2-user:ec2-user /opt/hrms
-sudo chown -R ec2-user:ec2-user /opt/docker
-sudo chown -R ec2-user:ec2-user /opt/scripts
-sudo chown -R ec2-user:ec2-user /opt/logs
-
-
-echo "Bootstrap Completed Successfully"
-date
-
+echo "==========================================="
+echo "Bootstrap Completed"
+echo "==========================================="
