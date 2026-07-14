@@ -8,7 +8,7 @@
 # Purpose : Main entry point for complete infrastructure setup
 # ==========================================================
 
-set -e
+set -euo pipefail
 
 #############################################################
 # Project Paths
@@ -24,7 +24,9 @@ JENKINS_DIR="${SCRIPT_DIR}/jenkins"
 SONAR_DIR="${SCRIPT_DIR}/sonarqube"
 MONITORING_DIR="${SCRIPT_DIR}/monitoring"
 K8S_DIR="${SCRIPT_DIR}/kubernetes"
-HEALTH_DIR="${SCRIPT_DIR}/healthcheck"
+DEPLOY_DIR="${SCRIPT_DIR}/deploy"
+HEALTH_DIR="${SCRIPT_DIR}/health"
+BACKUP_DIR="${SCRIPT_DIR}/backups"
 
 #############################################################
 # Load Configuration
@@ -63,69 +65,112 @@ main() {
     # Install Required Software
     #########################################################
 
+    log_info "Installing Required Software..."
+
     bash "${INSTALL_DIR}/install_os.sh"
     bash "${INSTALL_DIR}/install_git.sh"
     bash "${INSTALL_DIR}/install_java.sh"
-    bash "${INSTALL_DIR}/install_node.sh"
     bash "${INSTALL_DIR}/install_python.sh"
+    bash "${INSTALL_DIR}/install_node.sh"
     bash "${INSTALL_DIR}/install_docker.sh"
-    bash "${INSTALL_DIR}/install_terraform.sh"
+    bash "${INSTALL_DIR}/install_docker_compose.sh"
     bash "${INSTALL_DIR}/install_awscli.sh"
     bash "${INSTALL_DIR}/install_kubectl.sh"
+    bash "${INSTALL_DIR}/install_helm.sh"
     bash "${INSTALL_DIR}/install_k3s.sh"
 
     #########################################################
-    # Docker Stack
+    # Docker Platform
     #########################################################
 
-    bash "${DOCKER_DIR}/build_jenkins.sh"
-    bash "${DOCKER_DIR}/build_hrms.sh"
-    bash "${DOCKER_DIR}/start_stack.sh"
+    log_info "Building Docker Images..."
+
+    bash "${DOCKER_DIR}/build_images.sh"
+
+    log_info "Starting Docker Platform..."
+
+    bash "${DOCKER_DIR}/start_platform.sh"
 
     #########################################################
     # Jenkins
     #########################################################
 
+    log_info "Configuring Jenkins..."
+
     python3 "${JENKINS_DIR}/install_plugins.py"
     python3 "${JENKINS_DIR}/configure_jenkins.py"
     python3 "${JENKINS_DIR}/create_credentials.py"
+    python3 "${JENKINS_DIR}/configure_tools.py"
     python3 "${JENKINS_DIR}/create_pipeline.py"
 
     #########################################################
     # SonarQube
     #########################################################
 
-    python3 "${SONAR_DIR}/configure_sonar.py"
+    log_info "Configuring SonarQube..."
+
+    python3 "${SONAR_DIR}/configure_sonarqube.py"
+    python3 "${SONAR_DIR}/create_project.py"
+    python3 "${SONAR_DIR}/configure_quality_gate.py"
 
     #########################################################
     # Monitoring
     #########################################################
 
-    bash "${MONITORING_DIR}/install_prometheus.sh"
-    bash "${MONITORING_DIR}/install_node_exporter.sh"
-    bash "${MONITORING_DIR}/install_grafana.sh"
-    bash "${MONITORING_DIR}/install_loki.sh"
-    bash "${MONITORING_DIR}/install_promtail.sh"
+    log_info "Installing Monitoring Stack..."
+
+    bash "${MONITORING_DIR}/install_monitoring.sh"
+
+    python3 "${MONITORING_DIR}/configure_prometheus.py"
+    python3 "${MONITORING_DIR}/configure_grafana.py"
+    python3 "${MONITORING_DIR}/configure_loki.py"
+    python3 "${MONITORING_DIR}/configure_promtail.py"
 
     #########################################################
     # Kubernetes
     #########################################################
 
+    log_info "Deploying Kubernetes Platform..."
+
+    bash "${K8S_DIR}/initialize_cluster.sh"
+    bash "${K8S_DIR}/deploy_platform.sh"
     bash "${K8S_DIR}/deploy_hrms.sh"
+
+    #########################################################
+    # Deployment Verification
+    #########################################################
+
+    log_info "Verifying Deployment..."
+
+    python3 "${DEPLOY_DIR}/verify_deployment.py"
 
     #########################################################
     # Health Check
     #########################################################
 
-    bash "${HEALTH_DIR}/verify_services.sh"
-    bash "${HEALTH_DIR}/verify_ports.sh"
-    bash "${HEALTH_DIR}/verify_pipeline.sh"
+    log_info "Running Health Checks..."
+
+    python3 "${HEALTH_DIR}/health_check.py"
+
+    bash "${HEALTH_DIR}/verify_platform.sh"
+
+    python3 "${HEALTH_DIR}/report.py"
+
+    #########################################################
+    # Backup
+    #########################################################
+
+    log_info "Creating Initial Platform Backup..."
+
+    bash "${BACKUP_DIR}/backup_platform.sh"
 
     #########################################################
     # Completed
     #########################################################
 
-    log_success "Automation completed successfully."
+    log_success "==============================================="
+    log_success "HRMS Enterprise DevOps Platform Setup Complete"
+    log_success "==============================================="
 }
 
 #############################################################
