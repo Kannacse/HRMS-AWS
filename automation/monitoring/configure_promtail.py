@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+"""
+=============================================================
+Configure Promtail
+=============================================================
+"""
+
+CONFIG = """
+server:
+  http_listen_port: 9080
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+
+- job_name: system
+
+  static_configs:
+
+  - targets:
+
+      - localhost
+
+    labels:
+
+      job: system
+
+      __path__: /var/log/*.log
+
+- job_name: docker
+
+  static_configs:
+
+  - targets:
+
+      - localhost
+
+    labels:
+
+      job: docker
+
+      __path__: /var/lib/docker/containers/*/*.log
+"""
+
+with open("promtail-config.yaml", "w") as file:
+
+    file.write(CONFIG)
+
+print("Promtail configuration created.")
