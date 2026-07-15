@@ -14,16 +14,17 @@ source "${SCRIPT_DIR}/../config/variables.conf"
 log_info "Starting HRMS DevOps Platform..."
 
 #############################################################
-# Verify Docker
+# Verify Docker Service
 #############################################################
 
 if ! systemctl is-active --quiet docker
 then
     log_info "Starting Docker service..."
 
-    sudo systemctl start docker
+    systemctl start docker
+    systemctl enable docker
 
-    sudo systemctl enable docker
+    log_success "Docker service started."
 fi
 
 #############################################################
@@ -38,18 +39,47 @@ then
 fi
 
 #############################################################
-# Start Platform
+# Create .env if Missing
 #############################################################
 
-log_info "Starting containers..."
+if [ ! -f "${BACKEND_DIRECTORY}/.env" ]
+then
+    log_info "Creating .env from template..."
+
+    cp "${BACKEND_DIRECTORY}/.env.example" \
+       "${BACKEND_DIRECTORY}/.env"
+
+    log_success ".env created successfully."
+fi
+
+#############################################################
+# Verify Backend Image
+#############################################################
+
+if ! docker image inspect "${BACKEND_IMAGE}" >/dev/null 2>&1
+then
+    log_error "Backend image '${BACKEND_IMAGE}' not found."
+
+    log_info "Run automation/docker/build_images.sh first."
+
+    exit 1
+fi
+
+#############################################################
+# Start Containers
+#############################################################
+
+log_info "Starting Docker containers..."
 
 docker compose \
 -f "${DOCKER_COMPOSE_FILE}" \
-up -d
+up -d --no-build
 
 #############################################################
-# Verify
+# Verify Running Containers
 #############################################################
+
+sleep 5
 
 log_info "Running containers..."
 
