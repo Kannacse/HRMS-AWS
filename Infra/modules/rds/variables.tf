@@ -18,3 +18,8 @@ variable "rds_sg" {
 variable "private_subnets" {
   type = list(string)
 }
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}

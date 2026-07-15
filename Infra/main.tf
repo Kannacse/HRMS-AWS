@@ -36,6 +36,7 @@ module "rds" {
   name            = "${local.name}-db"
   db_username     = var.db_username
   db_password     = var.db_password
+  db_name         = var.db_name
   rds_sg          = module.security.rds_sg
   private_subnets = module.vpc.private_subnets
 }
