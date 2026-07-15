@@ -38,3 +38,5 @@ build/
 # Local
 local/
 temp/
+
+Infra/bootstrap/HRMS-AWS/
