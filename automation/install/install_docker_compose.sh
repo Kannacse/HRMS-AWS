@@ -1,28 +1,21 @@
 #!/bin/bash
 
-#############################################################
-# Docker Compose Installation
-#############################################################
-
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "${SCRIPT_DIR}/../common/logger.sh"
 
-log_info "Checking Docker Compose..."
+log_info "Installing Docker Compose..."
 
-if docker compose version >/dev/null 2>&1
-then
-    log_warn "Docker Compose already installed."
-    docker compose version
-    exit 0
-fi
+mkdir -p /usr/local/lib/docker/cli-plugins
 
-log_info "Installing Docker Compose Plugin..."
+curl -SL \
+https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
+-o /usr/local/lib/docker/cli-plugins/docker-compose
 
-sudo dnf install -y docker-compose-plugin
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
-log_success "Docker Compose installed."
+docker compose version
 
-docker compose version 
+log_success "Docker Compose installed successfully."

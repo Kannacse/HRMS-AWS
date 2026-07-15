@@ -21,18 +21,6 @@ then
     exit 1
 fi
 
-#############################################################
-# Build Jenkins Image
-#############################################################
-
-log_info "Building Jenkins image..."
-
-docker build \
-    -t "${CUSTOM_JENKINS_IMAGE}" \
-    -f "${DOCKERFILE_JENKINS}" \
-    "${JENKINS_BUILD_CONTEXT}"
-
-log_success "Jenkins image built."
 
 #############################################################
 # Build Backend Image

@@ -20,7 +20,6 @@ log_success "Operating system updated."
 log_info "Installing common utilities..."
 
 sudo dnf install -y \
-curl \
 wget \
 git \
 vim \
