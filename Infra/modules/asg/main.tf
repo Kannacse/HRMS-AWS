@@ -16,9 +16,28 @@ resource "aws_launch_template" "lt" {
 
   user_data = base64encode(file("${path.module}/../../bootstrap/bootstrap.sh"))
 
+  monitoring {
+    enabled = true
+  }
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
   network_interfaces {
     associate_public_ip_address = true
     security_groups             = [var.ec2_sg]
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name    = var.name
+      Project = "HRMS"
+      Owner   = "Kannan"
+    }
   }
 }
 

@@ -23,3 +23,7 @@ variable "key_name" {
   type        = string
   default     = "hrms-key-hyd"
 }
+variable "db_name" {
+  type    = string
+  default = "hrms"
+}
