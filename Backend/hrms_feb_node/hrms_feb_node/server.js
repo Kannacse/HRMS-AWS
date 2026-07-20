@@ -4,6 +4,7 @@ const express = require("express");
 const http = require("http");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const cors = require("cors");   // <-- NEW
 
 // Import routes
 const login = require('./router/login');
@@ -16,12 +17,27 @@ const activityLog = require('./router/activitylog');
 const app = express();
 
 // ============================
+// CORS Middleware (NEW)
+// ============================
+app.use(
+  cors({
+    origin: [
+      "http://localhost:8081",
+      "http://127.0.0.1:8081",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// ============================
 // Security Middleware
 // ============================
 app.use(helmet());
 app.use(express.json());
 
-// Trust only the first reverse proxy (recommended for Kubernetes/Ingress)
+// Trust only the first reverse proxy
 app.set("trust proxy", 1);
 
 // ============================
@@ -44,7 +60,7 @@ app.use("/api/", limiter);
 // API Routes
 // ============================
 
-// Login route with stricter limit
+// Login route
 app.use('/api/hrms/', loginLimiter, login);
 
 // Other routes
