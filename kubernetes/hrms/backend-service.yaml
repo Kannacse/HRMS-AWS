@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrms-backend-service
+  namespace: hrms
+
+spec:
+  selector:
+    app: hrms-backend
+
+  ports:
+  - port: 80
+    targetPort: 3000
+
+  type: ClusterIP
