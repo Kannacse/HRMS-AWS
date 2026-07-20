@@ -4,23 +4,8 @@
 # HRMS Enterprise DevOps Platform
 # Bootstrap Script
 #
-# Purpose:
-#   Complete end-to-end platform provisioning
-#
-# Flow:
-#   Validation
-#   Install Software
-#   Configure Application
-#   Database Initialization
-#   Build Docker Images
-#   Start Docker Platform
-#   Configure Jenkins
-#   Configure SonarQube
-#   Configure Monitoring
-#   Deploy Kubernetes
-#   Verify Deployment
-#   Health Checks
-#   Initial Backup
+# Author  : Kannan
+# Purpose : Main entry point for complete infrastructure setup
 # ==========================================================
 
 set -euo pipefail
@@ -34,8 +19,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMMON_DIR="${SCRIPT_DIR}/common"
 CONFIG_DIR="${SCRIPT_DIR}/config"
 INSTALL_DIR="${SCRIPT_DIR}/install"
-APPLICATION_DIR="${SCRIPT_DIR}/application"
-DATABASE_DIR="${SCRIPT_DIR}/database"
 DOCKER_DIR="${SCRIPT_DIR}/docker"
 JENKINS_DIR="${SCRIPT_DIR}/jenkins"
 SONAR_DIR="${SCRIPT_DIR}/sonarqube"
@@ -46,7 +29,7 @@ HEALTH_DIR="${SCRIPT_DIR}/health"
 BACKUP_DIR="${SCRIPT_DIR}/backups"
 
 #############################################################
-# Configuration
+# Load Configuration
 #############################################################
 
 source "${CONFIG_DIR}/environment.conf"
@@ -55,7 +38,7 @@ source "${CONFIG_DIR}/variables.conf"
 source "${CONFIG_DIR}/versions.conf"
 
 #############################################################
-# Common Libraries
+# Load Common Libraries
 #############################################################
 
 source "${COMMON_DIR}/logger.sh"
@@ -68,15 +51,13 @@ source "${COMMON_DIR}/validation.sh"
 
 main() {
 
-    log_info "======================================================="
-    log_info "HRMS Enterprise DevOps Platform Automation Started"
-    log_info "======================================================="
+    log_info "==============================================="
+    log_info "HRMS Enterprise DevOps Platform Automation"
+    log_info "==============================================="
 
     #########################################################
     # Validation
     #########################################################
-
-    log_info "Validating Environment..."
 
     validate_environment
 
@@ -99,25 +80,7 @@ main() {
     bash "${INSTALL_DIR}/install_k3s.sh"
 
     #########################################################
-    # Configure Application
-    #########################################################
-
-    log_info "Configuring Application..."
-
-    bash "${APPLICATION_DIR}/configure_environment.sh"
-
-    #########################################################
-    # Database
-    #########################################################
-
-    log_info "Preparing Database..."
-
-    bash "${DATABASE_DIR}/wait_for_database.sh"
-
-    bash "${DATABASE_DIR}/initialize_database.sh"
-
-    #########################################################
-    # Docker
+    # Docker Platform
     #########################################################
 
     log_info "Building Docker Images..."
@@ -170,9 +133,7 @@ main() {
     log_info "Deploying Kubernetes Platform..."
 
     bash "${K8S_DIR}/initialize_cluster.sh"
-
     bash "${K8S_DIR}/deploy_platform.sh"
-
     bash "${K8S_DIR}/deploy_hrms.sh"
 
     #########################################################
@@ -184,10 +145,10 @@ main() {
     python3 "${DEPLOY_DIR}/verify_deployment.py"
 
     #########################################################
-    # Health Checks
+    # Health Check
     #########################################################
 
-    log_info "Running Platform Health Checks..."
+    log_info "Running Health Checks..."
 
     python3 "${HEALTH_DIR}/health_check.py"
 
@@ -207,9 +168,9 @@ main() {
     # Completed
     #########################################################
 
-    log_success "======================================================="
-    log_success "HRMS Enterprise DevOps Platform Setup Completed"
-    log_success "======================================================="
+    log_success "==============================================="
+    log_success "HRMS Enterprise DevOps Platform Setup Complete"
+    log_success "==============================================="
 }
 
 #############################################################
@@ -217,3 +178,4 @@ main() {
 #############################################################
 
 main
+ 
