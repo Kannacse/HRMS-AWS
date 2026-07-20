@@ -21,21 +21,21 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-// Needed when behind AWS ALB / reverse proxy
-app.set("trust proxy", true);
+// Trust only the first reverse proxy (recommended for Kubernetes/Ingress)
+app.set("trust proxy", 1);
 
 // ============================
 // Rate Limiting
 // ============================
 
 const limiter = rateLimit({
-windowMs: 15 * 60 * 1000,
-max: 1000
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
 });
 
 const loginLimiter = rateLimit({
-windowMs: 15 * 60 * 1000,
-max: 20
+  windowMs: 15 * 60 * 1000,
+  max: 20,
 });
 
 app.use("/api/", limiter);
@@ -55,11 +55,16 @@ app.use('/api/hrms/', employeeLeaves);
 app.use('/api/hrms/activity', activityLog);
 
 // ============================
-// Health Check (Used by ALB)
+// Health Check
 // ============================
 
-app.get("/api/hrms/health", (req, res) => {
-res.status(200).json({ status: "OK" });
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "UP",
+    service: "HRMS Backend",
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // ============================
@@ -71,5 +76,5 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 server.listen(PORT, "0.0.0.0", () => {
-console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });

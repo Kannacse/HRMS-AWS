@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-backend
+  namespace: hrms
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: hrms-backend
+
+  template:
+    metadata:
+      labels:
+        app: hrms-backend
+
+    spec:
+      containers:
+        - name: hrms-backend
+          image: hrms-backend:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 3000
+
+          envFrom:
+            - configMapRef:
+                name: hrms-config
+            - secretRef:
+                name: hrms-secret
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5

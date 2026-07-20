@@ -6,11 +6,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of your app code
+# Copy application source
 COPY . .
 
-# Open the port your Node app uses
-EXPOSE 5100
+# Application listens on port 3000
+EXPOSE 3000
 
-# START COMMAND
-CMD ["node", "server.js"]
+# Start the application
+CMD ["npm", "start"]
