@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../auth');
 
 const { userDashboarddata } = require('../services/dashboard/dashboarddata');
-const { userlogoutlog } = require('../services/dashboard/logoutlog');
 
-// ==============================
+// ===================================
 // Dashboard Data
-// ==============================
+// ===================================
 router.post('/getempdata', verifyToken, async (req, res) => {
 
     console.log("======================================");
@@ -36,7 +35,6 @@ router.post('/getempdata', verifyToken, async (req, res) => {
             return res.status(200).json({
                 user_data: user_data
             });
-
         }
 
         console.log("Unauthorized User");
@@ -53,35 +51,7 @@ router.post('/getempdata', verifyToken, async (req, res) => {
         return res.status(500).json({
             error: "Internal Server Error"
         });
-
     }
-
-});
-
-
-// ==============================
-// Logout
-// ==============================
-router.post('/logoutlog', verifyToken, async (req, res) => {
-
-    try {
-
-        await userlogoutlog(req.body.userId);
-
-        res.status(200).json({
-            success: true
-        });
-
-    } catch (err) {
-
-        console.error(err);
-
-        res.status(500).json({
-            success: false
-        });
-
-    }
-
 });
 
 module.exports = router;
