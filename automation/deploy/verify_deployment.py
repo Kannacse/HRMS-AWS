@@ -1,47 +1,38 @@
 #!/usr/bin/env python3
 
-"""
-=============================================================
-Verify Deployment
-=============================================================
-"""
-
 import subprocess
+import sys
 
-checks = [
+commands = [
 
-    ["docker", "ps"],
+    ["kubectl", "get", "pods", "-n", "hrms"],
 
-    ["kubectl", "get", "pods"],
+    ["kubectl", "get", "svc", "-n", "hrms"],
 
-    ["kubectl", "get", "svc"],
-
-    ["kubectl", "get", "ingress"]
+    ["kubectl", "get", "ingress", "-n", "hrms"],
 
 ]
 
-print("=" * 60)
-print("Deployment Verification")
-print("=" * 60)
+for command in commands:
 
-for command in checks:
+    print("=" * 70)
+    print("Running:", " ".join(command))
 
-    print(f"\nRunning: {' '.join(command)}")
+    result = subprocess.run(command)
 
-    result = subprocess.run(
+    if result.returncode != 0:
+        sys.exit(result.returncode)
 
-        command,
+print("=" * 70)
+print("Checking Application...")
 
-        capture_output=True,
+curl = subprocess.run(
+    ["curl", "-f", "http://localhost"],
+)
 
-        text=True
+if curl.returncode != 0:
+    print("Frontend verification failed.")
+    sys.exit(1)
 
-    )
-
-    print(result.stdout)
-
-    if result.stderr:
-
-        print(result.stderr)
-
-print("\nVerification completed.")
+print()
+print("Deployment verified successfully.")
