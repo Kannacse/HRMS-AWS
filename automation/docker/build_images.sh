@@ -1,43 +1,86 @@
 #!/bin/bash
 
 #############################################################
-# Build Docker Images
+# Build and Import HRMS Docker Images
 #############################################################
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
-source "${SCRIPT_DIR}/../common/logger.sh"
-source "${SCRIPT_DIR}/../config/variables.conf"
+TAG=${1:-latest}
 
-#############################################################
-# Check Docker
-#############################################################
+BACKEND_DIR="${PROJECT_ROOT}/Backend/hrms_feb_node/hrms_feb_node"
+FRONTEND_DIR="${PROJECT_ROOT}/frontend/hrms_feb_flutter"
 
-if ! command -v docker >/dev/null 2>&1
-then
-    log_error "Docker is not installed."
-    exit 1
-fi
+echo "======================================"
+echo "Building HRMS Docker Images"
+echo "Tag : ${TAG}"
+echo "======================================"
 
-#############################################################
+#########################################
 # Build Backend Image
-#############################################################
+#########################################
 
-log_info "Building HRMS Backend image..."
+echo
+echo "Building Backend..."
 
 docker build \
-    -t "${BACKEND_IMAGE}" \
-    -f "${BACKEND_DOCKERFILE}" \
-    "${BACKEND_DIRECTORY}"
+    -t hrms-backend:${TAG} \
+    "${BACKEND_DIR}"
 
-log_success "Backend image built."
+#########################################
+# Build Frontend Image
+#########################################
 
-#############################################################
+echo
+echo "Building Frontend..."
+
+docker build \
+    --build-arg BASE_URL=http://localhost \
+    -t hrms-frontend:${TAG} \
+    "${FRONTEND_DIR}"
+
+#########################################
+# Import Images into K3s
+#########################################
+
+echo
+echo "Importing images into K3s..."
+
+docker save hrms-backend:${TAG} \
+    -o /tmp/hrms-backend-${TAG}.tar
+
+sudo k3s ctr images import \
+    /tmp/hrms-backend-${TAG}.tar
+
+docker save hrms-frontend:${TAG} \
+    -o /tmp/hrms-frontend-${TAG}.tar
+
+sudo k3s ctr images import \
+    /tmp/hrms-frontend-${TAG}.tar
+
+rm -f /tmp/hrms-backend-${TAG}.tar
+rm -f /tmp/hrms-frontend-${TAG}.tar
+
+echo "Images imported successfully."
+
+#########################################
 # Display Images
-#############################################################
+#########################################
 
-docker images
+echo
+echo "Docker Images"
 
-log_success "Docker image build completed."
+docker images | grep hrms
+
+echo
+echo "K3s Images"
+
+sudo k3s ctr images ls | grep hrms
+
+echo
+echo "======================================"
+echo "Build completed successfully."
+echo "======================================"
