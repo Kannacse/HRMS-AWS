@@ -40,6 +40,20 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 sh './automation/docker/build_images.sh test'
@@ -61,11 +75,13 @@ pipeline {
 
     post {
         success {
-            echo 'CI Pipeline completed successfully.'
+            echo '✅ HRMS CI/CD Pipeline completed successfully.'
         }
+
         failure {
-            echo 'CI Pipeline failed.'
+            echo '❌ HRMS CI/CD Pipeline failed.'
         }
+
         always {
             cleanWs()
         }
