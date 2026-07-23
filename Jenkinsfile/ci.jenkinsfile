@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSE_PROJECT_NAME = "hrms"
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Tools') {
+            steps {
+                sh '''
+                    git --version
+                    docker --version
+                    kubectl version --client
+                    python3 --version
+                '''
+            }
+        }
+
+        stage('Verify Docker') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+
+        stage('Verify Kubernetes') {
+            steps {
+                sh '''
+                    kubectl get nodes
+                    kubectl get namespaces
+                '''
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh './automation/docker/build_images.sh test'
+            }
+        }
+
+        stage('Deploy to K3s') {
+            steps {
+                sh './automation/kubernetes/deploy_hrms.sh test'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh 'python3 automation/deploy/verify_deployment.py'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI Pipeline completed successfully.'
+        }
+        failure {
+            echo 'CI Pipeline failed.'
+        }
+        always {
+            cleanWs()
+        }
+    }
+}
