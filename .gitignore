@@ -40,3 +40,4 @@ local/
 temp/
 
 Infra/bootstrap/HRMS-AWS/
+*.tar
