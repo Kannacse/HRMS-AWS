@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrms-frontend
+  namespace: hrms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrms-frontend
+  template:
+    metadata:
+      labels:
+        app: hrms-frontend
+    spec:
+      containers:
+      - name: hrms-frontend
+        image: hrms-frontend:v3
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
