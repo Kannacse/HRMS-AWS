@@ -84,21 +84,21 @@ pipeline {
         }
 
         stage('Push Docker Images') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-creds',
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )
-                ]) {
-                    sh '''
-                        chmod +x automation/docker/push_images.sh
-                        ./automation/docker/push_images.sh test
-                    '''
-                }
-            }
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )
+        ]) {
+            sh '''
+                chmod +x automation/docker/push_images.sh
+                ./automation/docker/push_images.sh ${BUILD_NUMBER}
+            '''
         }
+    }
+}
 
         stage('Import Images to K3s') {
             steps {
