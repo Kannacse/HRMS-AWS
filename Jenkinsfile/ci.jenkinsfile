@@ -63,10 +63,13 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-            steps {
-                sh './automation/docker/build_images.sh test'
-            }
-        }
+    steps {
+        sh '''
+            chmod +x automation/docker/build_images.sh
+            ./automation/docker/build_images.sh ${BUILD_NUMBER}
+        '''
+    }
+}
 
         stage('Trivy Security Scan') {
             steps {
@@ -76,6 +79,32 @@ pipeline {
 
                     ./automation/security/scan_backend.sh
                     ./automation/security/scan_frontend.sh
+                '''
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh '''
+                        chmod +x automation/docker/push_images.sh
+                        ./automation/docker/push_images.sh test
+                    '''
+                }
+            }
+        }
+
+        stage('Import Images to K3s') {
+            steps {
+                sh '''
+                    chmod +x automation/docker/import_images.sh
+                    ./automation/docker/import_images.sh test
                 '''
             }
         }
@@ -94,6 +123,7 @@ pipeline {
     }
 
     post {
+
         success {
             echo '✅ HRMS CI/CD Pipeline completed successfully.'
         }
