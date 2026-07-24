@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #############################################################
-# Build and Import HRMS Docker Images
+# Build HRMS Docker Images
 #############################################################
 
 set -euo pipefail
@@ -43,44 +43,15 @@ docker build \
     "${FRONTEND_DIR}"
 
 #########################################
-# Import Images into K3s
-#########################################
-
-echo
-echo "Importing images into K3s..."
-
-docker save hrms-backend:${TAG} \
-    -o /tmp/hrms-backend-${TAG}.tar
-
-sudo k3s ctr images import \
-    /tmp/hrms-backend-${TAG}.tar
-
-docker save hrms-frontend:${TAG} \
-    -o /tmp/hrms-frontend-${TAG}.tar
-
-sudo k3s ctr images import \
-    /tmp/hrms-frontend-${TAG}.tar
-
-rm -f /tmp/hrms-backend-${TAG}.tar
-rm -f /tmp/hrms-frontend-${TAG}.tar
-
-echo "Images imported successfully."
-
-#########################################
-# Display Images
+# Display Docker Images
 #########################################
 
 echo
 echo "Docker Images"
 
-docker images | grep hrms
-
-echo
-echo "K3s Images"
-
-sudo k3s ctr images ls | grep hrms
+docker images | grep hrms || true
 
 echo
 echo "======================================"
-echo "Build completed successfully."
+echo "Docker images built successfully."
 echo "======================================"
