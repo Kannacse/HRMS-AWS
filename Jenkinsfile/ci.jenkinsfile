@@ -68,6 +68,18 @@ pipeline {
             }
         }
 
+        stage('Trivy Security Scan') {
+            steps {
+                sh '''
+                    chmod +x automation/security/scan_backend.sh
+                    chmod +x automation/security/scan_frontend.sh
+
+                    ./automation/security/scan_backend.sh
+                    ./automation/security/scan_frontend.sh
+                '''
+            }
+        }
+
         stage('Deploy to K3s') {
             steps {
                 sh './automation/kubernetes/deploy_hrms.sh test'
@@ -91,6 +103,7 @@ pipeline {
         }
 
         always {
+            archiveArtifacts artifacts: 'reports/trivy/*.txt', fingerprint: true
             cleanWs()
         }
     }
