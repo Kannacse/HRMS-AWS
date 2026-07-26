@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_PROJECT_NAME = "hrms"
-        KUBECONFIG = "/var/lib/jenkins/.kube/config"
+        DOCKERHUB_USERNAME = "kannancloud"
+        BUILD_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -55,9 +55,7 @@ pipeline {
                     def scannerHome = tool 'SonarScanner'
 
                     withSonarQubeEnv('SonarQube') {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner
-                        """
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
@@ -109,9 +107,6 @@ pipeline {
             }
         }
 
-        // ================================
-        // NEW GITOPS STAGE
-        // ================================
         stage('Update Kubernetes Manifests') {
             steps {
                 sh '''
@@ -121,44 +116,61 @@ pipeline {
             }
         }
 
-        stage('Import Images to K3s') {
+        stage('Commit Manifest Changes') {
             steps {
                 sh '''
-                    chmod +x automation/docker/import_images.sh
-                    ./automation/docker/import_images.sh test
+                    git config user.name "Jenkins"
+                    git config user.email "jenkins@local"
+
+                    git add kubernetes/
+
+                    if git diff --cached --quiet; then
+                        echo "No manifest changes to commit."
+                    else
+                        git commit -m "ci: update image tags to ${BUILD_NUMBER}"
+                    fi
                 '''
             }
         }
 
-        stage('Deploy to K3s') {
+        stage('Push Manifest Changes') {
             steps {
-                sh '''
-                    chmod +x automation/kubernetes/deploy_hrms.sh
-                    ./automation/kubernetes/deploy_hrms.sh test
-                '''
-            }
-        }
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-pat',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN'
+                    )
+                ]) {
 
-        stage('Verify Deployment') {
-            steps {
-                sh 'python3 automation/deploy/verify_deployment.py'
+                    sh '''
+                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kannacse/HRMS-AWS.git HEAD:feature/gitops
+                    '''
+                }
             }
         }
     }
 
     post {
-
         success {
-            echo '✅ HRMS CI/CD Pipeline completed successfully.'
+            archiveArtifacts artifacts: 'reports/**/*', fingerprint: true
+            cleanWs()
+
+            echo "====================================="
+            echo "HRMS GitOps Pipeline Completed"
+            echo "Images pushed to Docker Hub"
+            echo "Git manifests updated"
+            echo "Argo CD will sync automatically"
+            echo "====================================="
         }
 
         failure {
-            echo '❌ HRMS CI/CD Pipeline failed.'
-        }
-
-        always {
-            archiveArtifacts artifacts: 'reports/trivy/*.txt, reports/gitleaks/*.sarif', fingerprint: true
+            archiveArtifacts artifacts: 'reports/**/*', fingerprint: true
             cleanWs()
+
+            echo "====================================="
+            echo "HRMS GitOps Pipeline Failed"
+            echo "====================================="
         }
     }
 }
