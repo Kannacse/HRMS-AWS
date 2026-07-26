@@ -109,6 +109,18 @@ pipeline {
             }
         }
 
+        // ================================
+        // NEW GITOPS STAGE
+        // ================================
+        stage('Update Kubernetes Manifests') {
+            steps {
+                sh '''
+                    chmod +x automation/gitops/update_image_tags.sh
+                    ./automation/gitops/update_image_tags.sh ${BUILD_NUMBER}
+                '''
+            }
+        }
+
         stage('Import Images to K3s') {
             steps {
                 sh '''
