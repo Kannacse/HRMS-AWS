@@ -14,6 +14,15 @@ pipeline {
             }
         }
 
+        stage('Gitleaks Security Scan') {
+            steps {
+                sh '''
+                    chmod +x automation/security/scan_gitleaks.sh
+                    ./automation/security/scan_gitleaks.sh
+                '''
+            }
+        }
+
         stage('Verify Tools') {
             steps {
                 sh '''
@@ -63,13 +72,13 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-    steps {
-        sh '''
-            chmod +x automation/docker/build_images.sh
-            ./automation/docker/build_images.sh ${BUILD_NUMBER}
-        '''
-    }
-}
+            steps {
+                sh '''
+                    chmod +x automation/docker/build_images.sh
+                    ./automation/docker/build_images.sh ${BUILD_NUMBER}
+                '''
+            }
+        }
 
         stage('Trivy Security Scan') {
             steps {
@@ -84,21 +93,21 @@ pipeline {
         }
 
         stage('Push Docker Images') {
-    steps {
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockerhub-creds',
-                usernameVariable: 'DOCKER_USER',
-                passwordVariable: 'DOCKER_PASS'
-            )
-        ]) {
-            sh '''
-                chmod +x automation/docker/push_images.sh
-                ./automation/docker/push_images.sh ${BUILD_NUMBER}
-            '''
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh '''
+                        chmod +x automation/docker/push_images.sh
+                        ./automation/docker/push_images.sh ${BUILD_NUMBER}
+                    '''
+                }
+            }
         }
-    }
-}
 
         stage('Import Images to K3s') {
             steps {
@@ -111,7 +120,10 @@ pipeline {
 
         stage('Deploy to K3s') {
             steps {
-                sh './automation/kubernetes/deploy_hrms.sh test'
+                sh '''
+                    chmod +x automation/kubernetes/deploy_hrms.sh
+                    ./automation/kubernetes/deploy_hrms.sh test
+                '''
             }
         }
 
@@ -133,7 +145,7 @@ pipeline {
         }
 
         always {
-            archiveArtifacts artifacts: 'reports/trivy/*.txt', fingerprint: true
+            archiveArtifacts artifacts: 'reports/trivy/*.txt, reports/gitleaks/*.sarif', fingerprint: true
             cleanWs()
         }
     }
