@@ -1,0 +1,103 @@
+# Namespace
+namespace: hrms
+
+# Backend Configuration
+backend:
+  replicaCount: 3
+
+  image:
+    repository: kannancloud/hrms-backend
+    tag: "15"
+    pullPolicy: Always
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+
+  livenessProbe:
+    path: /health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+
+  readinessProbe:
+    path: /health
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+# Frontend Configuration
+frontend:
+  replicaCount: 1
+
+  image:
+    repository: kannancloud/hrms-frontend
+    tag: "15"
+    pullPolicy: Always
+
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+
+# MySQL Configuration
+mysql:
+  replicaCount: 1
+
+  image:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 3306
+
+  database:
+    name: hrms
+
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    claimName: mysql-pvc
+
+# Application ConfigMap
+config:
+  nodeEnv: production
+  port: "3000"
+
+database:
+  host: mysql-service
+  port: "3306"
+  name: hrms
+
+attendance:
+  lateTime: "09:30:00"
+  earlyTime: "17:30:00"
+
+# Application Secret
+secret:
+  dbUser: root
+  dbPassword: root123
+  secretKey: change_this_to_a_long_random_secret
+  refreshSecretKey: change_this_to_another_random_secret
+
+# Ingress
+ingress:
+  enabled: true
+
+  className: traefik
+
+  host: localhost
+
+  frontend:
+    path: /
+    pathType: Prefix
+    serviceName: hrms-frontend-service
+    servicePort: 80
+
+  backend:
+    path: /api
+    pathType: Prefix
+    serviceName: hrms-backend-service
+    servicePort: 80

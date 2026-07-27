@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hrms-config
+  namespace: {{ .Values.namespace }}
+
+data:
+  NODE_ENV: {{ .Values.config.nodeEnv | quote }}
+  PORT: {{ .Values.config.port | quote }}
+
+  DB_HOST: {{ .Values.database.host | quote }}
+  DB_PORT: {{ .Values.database.port | quote }}
+  DB_NAME: {{ .Values.database.name | quote }}
+
+  LATETIME: {{ .Values.attendance.lateTime | quote }}
+  EARLYTIME: {{ .Values.attendance.earlyTime | quote }}
