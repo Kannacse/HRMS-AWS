@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: hrms-frontend
-          image: kannancloud/hrms-frontend:17
+          image: kannancloud/hrms-frontend:19
           imagePullPolicy: Always
 
           ports:
