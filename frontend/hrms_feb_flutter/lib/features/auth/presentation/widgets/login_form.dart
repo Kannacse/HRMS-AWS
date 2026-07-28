@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../controllers/login_cubit.dart';
-import 'custom_input.dart';
-import 'custom_button.dart';
-import '../../../../core/components/login_header.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_input.dart';
+
 import '../../../../app_colors.dart';
+import '../../../../core/components/login_header.dart';
 
 class LoginForm extends StatefulWidget {
   final String? credentialError;
 
-  const LoginForm({super.key, this.credentialError});
+  const LoginForm({
+    super.key,
+    this.credentialError,
+  });
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -34,8 +39,17 @@ class _LoginFormState extends State<LoginForm> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.credentialError != oldWidget.credentialError) {
-      credentialError = widget.credentialError;
+      setState(() {
+        credentialError = widget.credentialError;
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   void _validateAndLogin() {
@@ -51,9 +65,9 @@ class _LoginFormState extends State<LoginForm> {
 
     if (emailError == null && passwordError == null) {
       context.read<LoginCubit>().login(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-      );
+            emailController.text.trim(),
+            passwordController.text.trim(),
+          );
     }
   }
 
@@ -79,34 +93,18 @@ class _LoginFormState extends State<LoginForm> {
               color: Colors.blue,
             ),
           ),
+
           const SizedBox(height: 20),
 
-          /// Microsoft Login
-          // SizedBox(
-          //   width: 300,
-          //   child: ElevatedButton.icon(
-          //     style: ElevatedButton.styleFrom(
-          //       backgroundColor: Colors.white,
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(25),
-          //         side: const BorderSide(color: Colors.grey),
-          //       ),
-          //     ),
-          //     onPressed: () {},
-          //     icon: Image.asset('assets/icons/Microsoft_logo.png'),
-          //     label: const Text(
-          //       "Login With Microsoft",
-          //       style: TextStyle(color: Colors.black87),
-          //     ),
-          //   ),
-          // ),
-          const SizedBox(height: 20),
           SizedBox(
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Username / Email input
+                //---------------------------------------------------
+                // Username / Email
+                //---------------------------------------------------
+
                 const Text(
                   "Username/Email",
                   style: TextStyle(
@@ -115,32 +113,40 @@ class _LoginFormState extends State<LoginForm> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 8),
+
                 CustomInput(
+                  semanticsLabel: "email",
                   controller: emailController,
                   hintText: "Username/Email",
                   prefixIcon: Icons.person,
                   onChanged: (_) {
-                    {
-                      setState(() {
-                        emailError = null;
-                        credentialError = null;
-                      });
-                    }
+                    setState(() {
+                      emailError = null;
+                      credentialError = null;
+                    });
                   },
                 ),
+
                 if (emailError != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       emailError!,
-                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
 
                 const SizedBox(height: 20),
 
-                // Password input
+                //---------------------------------------------------
+                // Password
+                //---------------------------------------------------
+
                 const Text(
                   "Password",
                   style: TextStyle(
@@ -149,33 +155,41 @@ class _LoginFormState extends State<LoginForm> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 8),
+
                 CustomInput(
+                  semanticsLabel: "password",
                   controller: passwordController,
                   hintText: "Password",
                   prefixIcon: Icons.lock,
                   isPassword: true,
                   onChanged: (_) {
-                    {
-                      setState(() {
-                        passwordError = null;
-                        credentialError = null;
-                      });
-                    }
+                    setState(() {
+                      passwordError = null;
+                      credentialError = null;
+                    });
                   },
                 ),
+
                 if (passwordError != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       passwordError!,
-                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
 
                 const SizedBox(height: 16),
 
-                // ✅ INLINE CREDENTIAL ERROR (EXACTLY LIKE FIELD ERRORS)
+                //---------------------------------------------------
+                // Invalid credentials
+                //---------------------------------------------------
+
                 if (credentialError != null &&
                     emailError == null &&
                     passwordError == null)
@@ -191,7 +205,15 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
 
-                CustomButton(text: "Login", onPressed: _validateAndLogin),
+                //---------------------------------------------------
+                // Login Button
+                //---------------------------------------------------
+
+                CustomButton(
+                  semanticsLabel: "login",
+                  text: "Login",
+                  onPressed: _validateAndLogin,
+                ),
               ],
             ),
           ),

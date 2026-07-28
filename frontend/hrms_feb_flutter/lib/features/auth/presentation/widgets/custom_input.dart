@@ -7,6 +7,9 @@ class CustomInput extends StatelessWidget {
   final bool isPassword;
   final ValueChanged<String>? onChanged;
 
+  // NEW
+  final String? semanticsLabel;
+
   const CustomInput({
     super.key,
     required this.controller,
@@ -14,43 +17,62 @@ class CustomInput extends StatelessWidget {
     required this.prefixIcon,
     this.isPassword = false,
     this.onChanged,
+    this.semanticsLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    bool obscureText = isPassword; // local flag for password
+    bool obscureText = isPassword;
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return TextField(
-          controller: controller,
-          obscureText: isPassword ? obscureText : false,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            prefixIcon: Icon(prefixIcon, color: Colors.blue),
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.blue.withValues(alpha: 0.4)),
-            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Color(0xFF0096FF), width: 1.5),
+        return Semantics(
+          label: semanticsLabel,
+          textField: true,
+          child: TextField(
+            controller: controller,
+            obscureText: isPassword ? obscureText : false,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              prefixIcon: Icon(prefixIcon, color: Colors.blue),
+              hintText: hintText,
+              hintStyle: TextStyle(
+                color: Colors.blue.withValues(alpha: 0.4),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color(0xFF0096FF),
+                  width: 1.5,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color(0xFF003F7F),
+                  width: 2,
+                ),
+              ),
+              suffixIcon: isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        obscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                    )
+                  : null,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Color(0xFF003F7F), width: 2),
-            ),
-            // 👁 Eye Icon
-            suffixIcon: isPassword
-                ? IconButton(
-                    icon: Icon(
-                      obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () => setState(() {
-                      obscureText = !obscureText;
-                    }),
-                  )
-                : null,
           ),
         );
       },
