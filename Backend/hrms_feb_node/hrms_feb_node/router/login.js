@@ -1,103 +1,80 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
-router.post('/login', async (req, res) => {
-  try {
+const verifyToken = require('../auth');
+const { userDashboarddata } = require('../services/dashboard/dashboarddata');
 
-    // Temporary authentication bypass
-    const user = {
-      id: 3,
-      emprole: 1,
-      userstatus: "old",
-      firstname: "Anand",
-      lastname: "T",
-      userfullname: "Anand T",
-      emailaddress: "",
-      contactnumber: "",
-      employeeId: "CBT720540",
-      policy_status: "policy_acknowledged",
-      jobtitle_id: 1,
-      themes: "default",
-      isactive: 1
-    };
+// ===================================
+// Dashboard Data
+// ===================================
+router.post('/getempdata', verifyToken, async (req, res) => {
 
-    // Generate JWT Access Token
-    const accessToken = jwt.sign(
-      {
-        id: user.id,
-        employeeId: user.employeeId,
-        emprole: user.emprole
-      },
-      process.env.SECRET_KEY,
-      {
-        algorithm: "HS256",
-        expiresIn: "1h"
-      }
-    );
+    console.log("\n======================================");
+    console.log("GET EMP DATA API CALLED");
+    console.log("======================================");
 
-    // Generate JWT Refresh Token
-    const refreshToken = jwt.sign(
-      {
-        id: user.id
-      },
-      process.env.SECRET_KEY,
-      {
-        algorithm: "HS256",
-        expiresIn: "7d"
-      }
-    );
+    // Request Headers
+    console.log("\nRequest Headers:");
+    console.log(req.headers);
 
-    return res.status(200).json({
-      accessToken,
-      refreshToken,
-      user
-    });
+    // Authorization Header
+    console.log("\nAuthorization Header:");
+    console.log(req.headers.authorization);
 
-  } catch (error) {
-    console.error("Login error:", error);
+    // Request Body
+    console.log("\nRequest Body:");
+    console.log(req.body);
 
-    return res.status(500).json({
-      error: "Internal server error"
-    });
-  }
-});
+    // JWT Payload
+    console.log("\nDecoded Token:");
+    console.log(JSON.stringify(req.user, null, 2));
 
-router.post('/refresh', async (req, res) => {
+    // User IDs
+    const bodyUserId = req.body.userId;
+    const tokenUserId = req.user?.id;
+    const year = new Date().getFullYear();
 
-  const { refreshToken } = req.body;
+    console.log("\nUser ID from Request Body :", bodyUserId);
+    console.log("User ID from JWT Token    :", tokenUserId);
 
-  if (!refreshToken) {
-    return res.status(401).json({
-      message: "No refresh token"
-    });
-  }
+    try {
 
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.SECRET_KEY);
+        // Using request body for now (same as original code)
+        const user_data = await userDashboarddata(bodyUserId, year);
 
-    const accessToken = jwt.sign(
-      {
-        id: decoded.id,
-        employeeId: "CBT720540",
-        emprole: 1
-      },
-      process.env.SECRET_KEY,
-      {
-        algorithm: "HS256",
-        expiresIn: "1h"
-      }
-    );
+        console.log("\nDashboard Service Response:");
+        console.log(JSON.stringify(user_data, null, 2));
 
-    return res.status(200).json({
-      accessToken
-    });
+        if (user_data && user_data.success) {
 
-  } catch (err) {
-    return res.status(403).json({
-      message: "Invalid refresh token"
-    });
-  }
+            console.log("\nDashboard API SUCCESS");
+
+            return res.status(200).json({
+                user_data: user_data
+            });
+        }
+
+        console.log("\nDashboard API FAILED");
+        console.log("Returned Object:");
+        console.log(user_data);
+
+        return res.status(401).json({
+            error: "Unauthorized User",
+            details: user_data
+        });
+
+    } catch (err) {
+
+        console.log("\nDashboard API EXCEPTION");
+        console.error(err);
+
+        return res.status(500).json({
+            error: "Internal Server Error",
+            message: err.message,
+            stack: err.stack
+        });
+    }
+
 });
 
 module.exports = router;

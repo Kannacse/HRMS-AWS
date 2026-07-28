@@ -38,7 +38,7 @@ echo
 echo "Building Frontend..."
 
 docker build \
-    --build-arg BASE_URL=http://localhost \
+    --build-arg BASE_URL="" \
     -t hrms-frontend:${TAG} \
     "${FRONTEND_DIR}"
 

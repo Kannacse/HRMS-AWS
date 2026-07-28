@@ -88,7 +88,7 @@ ingress:
 
   className: traefik
 
-  host: localhost
+  host: hrms.local
 
   frontend:
     path: /
