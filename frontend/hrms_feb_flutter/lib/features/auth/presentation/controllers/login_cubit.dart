@@ -28,7 +28,7 @@ class LoginCubit extends Cubit<LoginState> {
       // IMPORTANT: Set JWT for all future API requests
       apiService.setToken(user.token);
 
-      await AuthStorage.saveUser(user);
+      // await AuthStorage.saveUser(user);
 
       print("========================================");
       print("LOGIN SUCCESS");

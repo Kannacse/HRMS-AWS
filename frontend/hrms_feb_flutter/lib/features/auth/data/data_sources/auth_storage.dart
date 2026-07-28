@@ -1,14 +1,17 @@
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hrms/features/auth/domain/entities/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../domain/entities/user.dart';
 
 class AuthStorage {
-  // Encrypted storage instance
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  static const FlutterSecureStorage _secureStorage =
+      FlutterSecureStorage();
 
   static const String _keyUser = 'logged_in_user';
 
-  /// Save user securely
   static Future<void> saveUser(User user) async {
     final jsonString = jsonEncode({
       'userId': user.userId,
@@ -19,15 +22,27 @@ class AuthStorage {
       'emprole': user.emprole,
     });
 
-    await _storage.write(
-      key: _keyUser,
-      value: jsonString,
-    );
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_keyUser, jsonString);
+    } else {
+      await _secureStorage.write(
+        key: _keyUser,
+        value: jsonString,
+      );
+    }
   }
 
-  /// Get user securely
   static Future<User?> getUser() async {
-    final jsonString = await _storage.read(key: _keyUser);
+    String? jsonString;
+
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      jsonString = prefs.getString(_keyUser);
+    } else {
+      jsonString = await _secureStorage.read(key: _keyUser);
+    }
+
     if (jsonString == null) return null;
 
     final Map<String, dynamic> json = jsonDecode(jsonString);
@@ -42,12 +57,12 @@ class AuthStorage {
     );
   }
 
-  /// Clear user data (logout)
   static Future<void> clearUser() async {
-    await _storage.delete(key: _keyUser);
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_keyUser);
+    } else {
+      await _secureStorage.delete(key: _keyUser);
+    }
   }
-
-  // static Future<void> clearAll() async {
-  //   await _storage.deleteAll();
-  // }
 }
