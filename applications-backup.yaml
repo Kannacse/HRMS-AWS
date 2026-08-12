@@ -1,0 +1,271 @@
+apiVersion: v1
+items:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    creationTimestamp: "2026-07-26T14:29:39Z"
+    generation: 770
+    name: hrms-aws
+    namespace: argocd
+    resourceVersion: "152887"
+    uid: af72ffd0-ef0a-4421-a98b-3385214e5e31
+  spec:
+    destination:
+      namespace: hrms
+      server: https://kubernetes.default.svc
+    project: default
+    source:
+      directory:
+        recurse: true
+      path: kubernetes
+      repoURL: https://github.com/Kannacse/HRMS-AWS.git
+      targetRevision: feature/gitops
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+  status:
+    controllerNamespace: argocd
+    health:
+      lastTransitionTime: "2026-07-28T10:58:01Z"
+      status: Healthy
+    history:
+    - deployStartedAt: "2026-07-26T16:27:17Z"
+      deployedAt: "2026-07-26T16:27:18Z"
+      id: 0
+      initiatedBy:
+        automated: true
+      revision: 991f3e7c2cf3a829bc4664f3798f8cca30998dc9
+      source:
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-26T16:32:48Z"
+      deployedAt: "2026-07-26T16:32:49Z"
+      id: 1
+      initiatedBy:
+        automated: true
+      revision: 991f3e7c2cf3a829bc4664f3798f8cca30998dc9
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-26T16:52:46Z"
+      deployedAt: "2026-07-26T16:52:48Z"
+      id: 2
+      initiatedBy:
+        automated: true
+      revision: b0356bf12a610ac666b75e1d4e3bbaff96df5c3a
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-27T07:38:30Z"
+      deployedAt: "2026-07-27T07:38:31Z"
+      id: 3
+      initiatedBy:
+        automated: true
+      revision: 365c7f8259f9ea95218f7ca9a240f519a7309a06
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-27T11:09:53Z"
+      deployedAt: "2026-07-27T11:09:54Z"
+      id: 4
+      initiatedBy:
+        automated: true
+      revision: d25e3e7e87795c805e23a1120881eddb6f1597c1
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-27T14:38:14Z"
+      deployedAt: "2026-07-27T14:38:16Z"
+      id: 5
+      initiatedBy:
+        automated: true
+      revision: 61ab95a4ee869fc25340f59303061f562221ea9a
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-27T17:06:12Z"
+      deployedAt: "2026-07-27T17:06:14Z"
+      id: 6
+      initiatedBy:
+        automated: true
+      revision: bab1c1e7d064ddcd3479784c0ed366f42f041623
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    - deployStartedAt: "2026-07-28T10:57:26Z"
+      deployedAt: "2026-07-28T10:57:27Z"
+      id: 7
+      initiatedBy:
+        automated: true
+      revision: bd37c63abebdcfb073fce7d7b56cec37a11d0c2b
+      source:
+        directory:
+          recurse: true
+        path: kubernetes
+        repoURL: https://github.com/Kannacse/HRMS-AWS.git
+        targetRevision: feature/gitops
+    operationState:
+      finishedAt: "2026-07-28T10:57:28Z"
+      message: successfully synced (all tasks run)
+      operation:
+        initiatedBy:
+          automated: true
+        retry:
+          limit: 5
+        sync:
+          autoHealAttemptsCount: 1
+          prune: true
+          resources:
+          - group: apps
+            kind: Deployment
+            name: hrms-frontend
+          - group: apps
+            kind: Deployment
+            name: hrms-backend
+          revision: bd37c63abebdcfb073fce7d7b56cec37a11d0c2b
+          source:
+            directory:
+              recurse: true
+            path: kubernetes
+            repoURL: https://github.com/Kannacse/HRMS-AWS.git
+            targetRevision: feature/gitops
+      phase: Succeeded
+      startedAt: "2026-07-28T10:57:28Z"
+      syncResult:
+        resources:
+        - group: apps
+          hookPhase: Running
+          images:
+          - kannancloud/hrms-frontend:22
+          kind: Deployment
+          message: deployment.apps/hrms-frontend unchanged
+          name: hrms-frontend
+          namespace: hrms
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: apps
+          hookPhase: Running
+          images:
+          - kannancloud/hrms-backend:22
+          kind: Deployment
+          message: deployment.apps/hrms-backend unchanged
+          name: hrms-backend
+          namespace: hrms
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        revision: bd37c63abebdcfb073fce7d7b56cec37a11d0c2b
+        source:
+          directory:
+            recurse: true
+          path: kubernetes
+          repoURL: https://github.com/Kannacse/HRMS-AWS.git
+          targetRevision: feature/gitops
+    reconciledAt: "2026-07-29T06:27:27Z"
+    resourceHealthSource: appTree
+    resources:
+    - kind: ConfigMap
+      name: hrms-config
+      namespace: hrms
+      status: Synced
+      version: v1
+    - kind: Namespace
+      name: hrms
+      status: Synced
+      version: v1
+    - kind: PersistentVolumeClaim
+      name: mysql-pvc
+      namespace: hrms
+      status: Synced
+      version: v1
+    - kind: Secret
+      name: hrms-secret
+      namespace: hrms
+      status: Synced
+      version: v1
+    - kind: Service
+      name: hrms-backend-service
+      namespace: hrms
+      status: Synced
+      version: v1
+    - kind: Service
+      name: hrms-frontend-service
+      namespace: hrms
+      status: Synced
+      version: v1
+    - kind: Service
+      name: mysql-service
+      namespace: hrms
+      status: Synced
+      version: v1
+    - group: apps
+      kind: Deployment
+      name: hrms-backend
+      namespace: hrms
+      status: Synced
+      version: v1
+    - group: apps
+      kind: Deployment
+      name: hrms-frontend
+      namespace: hrms
+      status: Synced
+      version: v1
+    - group: apps
+      kind: Deployment
+      name: mysql
+      namespace: hrms
+      status: Synced
+      version: v1
+    - group: networking.k8s.io
+      kind: Ingress
+      name: hrms-ingress
+      namespace: hrms
+      status: Synced
+      version: v1
+    sourceHydrator: {}
+    sourceType: Directory
+    summary:
+      externalURLs:
+      - http://hrms.local/
+      - http://hrms.local/api
+      images:
+      - kannancloud/hrms-backend:22
+      - kannancloud/hrms-frontend:22
+      - mysql:8.0
+    sync:
+      comparedTo:
+        destination:
+          namespace: hrms
+          server: https://kubernetes.default.svc
+        source:
+          directory:
+            recurse: true
+          path: kubernetes
+          repoURL: https://github.com/Kannacse/HRMS-AWS.git
+          targetRevision: feature/gitops
+      revision: bd37c63abebdcfb073fce7d7b56cec37a11d0c2b
+      status: Synced
+kind: List
+metadata:
+  resourceVersion: ""

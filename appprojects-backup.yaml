@@ -1,0 +1,24 @@
+apiVersion: v1
+items:
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    creationTimestamp: "2026-07-26T14:13:14Z"
+    generation: 1
+    name: default
+    namespace: argocd
+    resourceVersion: "93078"
+    uid: 9df86521-7e95-4855-aa1e-051e980ce804
+  spec:
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    destinations:
+    - namespace: '*'
+      server: '*'
+    sourceRepos:
+    - '*'
+  status: {}
+kind: List
+metadata:
+  resourceVersion: ""
