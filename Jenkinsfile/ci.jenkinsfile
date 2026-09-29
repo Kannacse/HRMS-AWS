@@ -84,8 +84,8 @@ pipeline {
                     chmod +x automation/security/scan_backend.sh
                     chmod +x automation/security/scan_frontend.sh
 
-                    ./automation/security/scan_backend.sh
-                    ./automation/security/scan_frontend.sh
+                    ./automation/security/scan_backend.sh "${BUILD_NUMBER}"
+                    ./automation/security/scan_frontend.sh "${BUILD_NUMBER}"
                 '''
             }
         }

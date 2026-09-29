@@ -2,7 +2,8 @@
 
 set -e
 
-IMAGE_NAME="hrms-backend:test"
+TAG="${1:-test}"
+IMAGE_NAME="hrms-backend:${TAG}"
 REPORT_DIR="reports/trivy"
 
 mkdir -p "$REPORT_DIR"
