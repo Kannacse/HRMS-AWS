@@ -13,6 +13,7 @@ const leaves = require('./router/leaves');
 const attendance = require('./router/attendance');
 const employeeLeaves = require('./router/employee_leaves');
 const activityLog = require('./router/activitylog');
+const employees = require('./router/employees');
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use('/api/hrms/', dashboard);
 app.use('/api/hrms/', leaves);
 app.use('/api/hrms/', attendance);
 app.use('/api/hrms/', employeeLeaves);
+app.use('/api/hrms/', employees);
 app.use('/api/hrms/activity', activityLog);
 
 // ============================

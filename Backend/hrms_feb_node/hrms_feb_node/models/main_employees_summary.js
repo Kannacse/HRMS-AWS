@@ -38,6 +38,10 @@ module.exports = (sequelize,DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    isactive: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
     businessunit_id 	:{
       type: DataTypes.INTEGER,
       allowNull: true
