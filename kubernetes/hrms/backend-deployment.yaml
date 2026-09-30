@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: hrms-backend
-          image: kannancloud/hrms-backend:37
+          image: kannancloud/hrms-backend:38
           imagePullPolicy: Always
 
           ports:
