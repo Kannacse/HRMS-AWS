@@ -13,11 +13,6 @@ const MainUsers = db.main_users;
 // ===================================
 router.get('/employees', verifyToken, async (req, res) => {
 
-    console.log("======================================");
-    console.log("GET EMPLOYEES API CALLED");
-    console.log("Decoded Token:");
-    console.log(req.user);
-
     try {
 
         // Get authenticated user's ID from JWT

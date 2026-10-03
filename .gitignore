@@ -41,3 +41,6 @@ temp/
 
 Infra/bootstrap/HRMS-AWS/
 *.tar
+
+# Test coverage
+coverage/
